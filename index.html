@@ -44,7 +44,6 @@
         
         .input-box { display: block; width: 100%; }
         .input-box label { font-weight: bold; margin-bottom: 8px; color: #2c3e50; font-size: 1.05rem; display: block; }
-        
         .input-box textarea { width: 100%; height: 250px; min-height: 150px; padding: 18px; border: 2px solid #f1c40f; border-radius: 8px; font-family: inherit; font-size: 1.1rem; resize: vertical; box-sizing: border-box; background-color: #fffdf5; line-height: 1.6; margin-bottom: 10px; }
         
         .upload-area { display: flex; align-items: center; gap: 10px; }
@@ -52,7 +51,6 @@
         .upload-btn:hover { background-color: #d68910; }
         .upload-status { font-size: 0.9rem; color: #7f8c8d; }
 
-        /* 主管評分區專用樣式 */
         .question-text { font-weight: bold; color: #34495e; margin-bottom: 10px; display: block; }
         .tag-role { background-color: #e8f4f8; color: #2980b9; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; margin-right: 10px; }
         .tag-dimension { background-color: #fef5e7; color: #d35400; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; }
@@ -84,10 +82,11 @@
         <div id="tab-policy" class="tab-content active">
             <div class="card">
                 <div class="card-title">🔹 職級評估政策說明</div>
-                <div class="summary-text">
-                    <p><b>初階工程師：</b>KPI 多、OKR 少、IDP 要很具體。確保「基本盤穩定」。</p>
-                    <p><b>資深工程師：</b>OKR 與 IDP 要拉高比重。看「影響力」而不是工時。</p>
-                    <p><b>高潛力成員：</b>多問「如果你是我，會怎麼做？」</p>
+                <div class="summary-text" style="line-height: 2;">
+                    <p><b>1. Junior Engineer (13, 19) - 穩固基本盤：</b>著重於日常任務 (KPI) 的準確率與執行力。IDP 需具體列出預計補強的硬體/韌體基礎技能。</p>
+                    <p><b>2. Senior Engineer (23) - 獨立解決與跨界：</b>不再僅看工時，而是看「影響力」。評估重點在於獨立解決系統性 Bug，以及在 OKR 中提出優化流程的具體方案。</p>
+                    <p><b>3. EE/FW Leader (29) - 資源與協調：</b>著重跨部門溝通與專案時程控管。績效來自於能否帶領團隊在資源受限下達成目標。</p>
+                    <p><b>4. Design Manager (33, 39) - 戰略與培育：</b>著重 OKR 創新與團隊 IDP 發展。評估指標為客戶滿意度、防堵專案風險，以及培育出多少能獨當一面的 Senior 成員。</p>
                 </div>
             </div>
             <div class="card">
@@ -128,7 +127,7 @@
                     <div class="reference-box">
                         <h4>IDP - 未來潛力</h4>
                         <p><b>評估重點：</b>專業知識與技能熟練度 / 語言熟悉度 / 是否能持續學習與應用新技術</p>
-                        <p style="color:#7f8c8d; font-size:0.9rem; margin-top:5px;"><b>撰寫範例：</b>從英語口說基礎趨近於零的起點出發，我透過反覆演練簡報與修正專業術語發音，達成能於團隊面前獨立念讀並講解數頁技術簡報的顯著進步。</p>
+                        <p style="color:#7f8c8d; font-size:0.9rem; margin-top:5px;"><b>撰寫範例：</b>針對 OOO 專業領域知識不足，我透過參與內部培訓與自主研讀規格書，最終取得相關認證，並能獨立完成 OOO 模組的設計與除錯。</p>
                     </div>
                     <div class="input-box">
                         <label>✏️ 請填寫您的 IDP 實績：</label>
@@ -136,7 +135,7 @@
                         <div class="upload-area">
                             <input type="file" id="img_idp" accept="image/*" style="display:none;" onchange="uploadImage(this, 'idp_text', 'status_idp')">
                             <button class="upload-btn" type="button" onclick="document.getElementById('img_idp').click()">📎 上傳證明圖片</button>
-                            <span class="upload-status" id="status_idp">支援 PNG, JPG。上傳後自動轉為網址貼入框內。</span>
+                            <span class="upload-status" id="status_idp">若有機密疑慮，請手動貼上內部 Google Drive 網址。</span>
                         </div>
                     </div>
                 </div>
@@ -158,7 +157,7 @@
                         <div class="upload-area">
                             <input type="file" id="img_okr" accept="image/*" style="display:none;" onchange="uploadImage(this, 'okr_text', 'status_okr')">
                             <button class="upload-btn" type="button" onclick="document.getElementById('img_okr').click()">📎 上傳證明圖片</button>
-                            <span class="upload-status" id="status_okr">支援 PNG, JPG。上傳後自動轉為網址貼入框內。</span>
+                            <span class="upload-status" id="status_okr">若有機密疑慮，請手動貼上內部 Google Drive 網址。</span>
                         </div>
                     </div>
                 </div>
@@ -174,7 +173,7 @@
                         <div class="upload-area">
                             <input type="file" id="img_kpi" accept="image/*" style="display:none;" onchange="uploadImage(this, 'kpi_text', 'status_kpi')">
                             <button class="upload-btn" type="button" onclick="document.getElementById('img_kpi').click()">📎 上傳證明圖片</button>
-                            <span class="upload-status" id="status_kpi">支援 PNG, JPG。上傳後自動轉為網址貼入框內。</span>
+                            <span class="upload-status" id="status_kpi">若有機密疑慮，請手動貼上內部 Google Drive 網址。</span>
                         </div>
                     </div>
                 </div>
@@ -227,14 +226,9 @@
     </div>
 
     <script>
-        // ==========================================
-        // 🔑 系統金鑰設定區 (老闆請在這裡填入您的網址與金鑰)
-        // ==========================================
+        // 🔑 請把您的Google網址與ImgBB圖床金鑰貼在這裡
         const DATABASE_URL = "https://script.google.com/macros/s/AKfycbw2vXcdwUQySt6MkPVXXWc-SAZ_DEriWxwd1T0AXSvaMQTCqb4og8BUdg9biKx-0rk/exec";
-        
-        // 申請免費圖床金鑰： https://api.imgbb.com/
         const IMGBB_API_KEY = "7288ba9f0453b8e0f8ca8e19d9a3046b";
-        // ==========================================
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -245,9 +239,9 @@
 
         const kpiMatrix = {
             'EE': {
-                'junior': '<b>【Base line】</b><br>1. BOM create and maintain.<br>2. Work with senior engineer 2nd source spec check, apply symbol.<br>3. Help senior engineer task.<br>4. Daughter board design (Riser, interposer card etc).<br>5. Rework and Debug with senior engineer.<br>6. Check list prepare.<br>7. Design no low level HW issue.<br><br><b>【OutStanding】</b><br>1. Independent board level debug and daughter board schematic design.<br>2. Independent MB schematic review and provide solution.',
+                'junior': '<b>【Base line】</b><br>1. BOM create and maintain.<br>2. Work with senior engineer 2nd source spec check, apply symbol.<br>3. Help senior engineer task.<br>4. Daughter board design.<br>5. Rework and Debug with senior engineer.<br>6. Check list prepare.<br>7. Design no low level HW issue.<br><br><b>【OutStanding】</b><br>1. Independent board level debug and daughter board schematic design.<br>2. Independent MB schematic review and provide solution.',
                 'senior': '<b>【Base line】</b><br>1. Mother board schematic design, GPIO table, Sequence design.<br>2. Layout prepare & review.<br>3. Prepare schematic & Layout file for vendor review.<br>4. Board level bug handle and solve.<br>5. Help solve junior engineer question.<br>6. Check list prepare.<br><br><b>【OutStanding】</b><br>1. System level debug and cross function team debug.<br>2. Proposal prepare and solution survey.',
-                'leader': '<b>【Base line】</b><br>1. Resource request to DM.<br>2. Review MB schematic/layout file & junior engineer working items.<br>3. System level bug handle and solve. Prepare analysis report.<br>4. Proposal prepare and new solution survey.<br>5. Check list review.<br><br><b>【OutStanding】</b><br>1. Cross function team negotiation.<br>2. Overall project status handle and update to manager.<br>3. Discus with customer for system design.',
+                'leader': '<b>【Base line】</b><br>1. Resource request to DM.<br>2. Review MB schematic/layout file & junior engineer working items.<br>3. System level bug handle and solve.<br>4. Proposal prepare and new solution survey.<br>5. Check list review.<br><br><b>【OutStanding】</b><br>1. Cross function team negotiation.<br>2. Overall project status handle and update to manager.<br>3. Discus with customer for system design.',
                 'manager': '<b>【Base line】</b><br>1. Review overall connection, key feature design.<br>2. Schedule control.<br>3. Discus with customer for system design.<br>4. Overall project status handle.<br>5. Cross function team negotiation.<br>6. Task filter and assign.<br><br><b>【OutStanding】</b><br>1. Limitation resource to let project on-going.<br>2. No complain or escalate from customer/cross function.<br>3. All member can achieve outstanding requirement.'
             },
             'FW': {
@@ -275,8 +269,8 @@
             if (!file) return;
             const statusSpan = document.getElementById(statusId);
             
-            if(IMGBB_API_KEY.includes("請貼上")) {
-                statusSpan.innerText = "❌ 系統尚未設定圖床金鑰，無法上傳。";
+            if(IMGBB_API_KEY.includes("請填寫")) {
+                statusSpan.innerText = "❌ 未設定金鑰，無法上傳。";
                 statusSpan.style.color = "#e74c3c";
                 return;
             }
@@ -319,7 +313,6 @@
                 });
             });
 
-            // 回復雷達圖的 radio btn 記憶
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 const savedRadio = localStorage.getItem('RD2Sys_' + radio.name);
                 if(savedRadio && radio.value === savedRadio) radio.checked = true;
@@ -369,6 +362,7 @@
             const fullRole = dept + " - " + roleText;
 
             const formData = new URLSearchParams();
+            formData.append('type', 'self'); // 標記為員工自評
             formData.append('name', name);
             formData.append('id', id);
             formData.append('role', fullRole);
@@ -379,10 +373,7 @@
             document.getElementById('statusMessage').style.color = 'blue';
             document.getElementById('statusMessage').innerText = '資料傳送至雲端中，請稍候...';
 
-            if(DATABASE_URL.includes("請把您的")) {
-                alert("老闆，您忘記在程式碼最下方填寫 Google 網址了！");
-                return;
-            }
+            if(DATABASE_URL.includes("請填寫")) return alert("老闆，您忘記填寫 Google 網址了！");
 
             fetch(DATABASE_URL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
@@ -411,20 +402,15 @@
             if(!allAnswered) return alert("還有題目尚未評分！");
 
             const formData = new URLSearchParams();
-            formData.append('name', "主管評分: " + name);
+            formData.append('type', 'radar'); // 標記為主管評分
+            formData.append('name', name);
             formData.append('id', id);
-            formData.append('role', "主管評分");
-            formData.append('idp', "-");
-            formData.append('okr', "-");
             formData.append('kpi', scores);
 
             document.getElementById('statusMessageRadar').style.color = 'blue';
             document.getElementById('statusMessageRadar').innerText = '分數傳送中...';
 
-            if(DATABASE_URL.includes("請把您的")) {
-                alert("老闆，您忘記在程式碼最下方填寫 Google 網址了！");
-                return;
-            }
+            if(DATABASE_URL.includes("請填寫")) return alert("老闆，您忘記填寫 Google 網址了！");
 
             fetch(DATABASE_URL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
