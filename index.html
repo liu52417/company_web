@@ -8,7 +8,7 @@
         body { font-family: 'Segoe UI', '微軟正黑體', sans-serif; background-color: #f0f2f5; margin: 0; display: flex; color: #333; }
         .sidebar { width: 260px; background-color: #1a252f; color: #ecf0f1; padding: 30px 20px; height: 100vh; position: fixed; box-shadow: 2px 0 5px rgba(0,0,0,0.1); overflow-y: auto; }
         .sidebar h2 { font-size: 1.2rem; border-bottom: 2px solid #3498db; padding-bottom: 15px; margin-bottom: 30px; letter-spacing: 1px; }
-        .sidebar ul { list-style-type: none; padding: 0; }
+        .sidebar ul { list-style-type: none; padding: 0; margin: 0; }
         .sidebar li { padding: 15px 10px; margin-bottom: 10px; background-color: #2c3e50; border-radius: 5px; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
         .sidebar li:hover { background-color: #34495e; }
         .sidebar li.active { background-color: #34495e; border-left: 4px solid #3498db; font-weight: bold; }
@@ -22,16 +22,14 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .card { background: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 5px solid #3498db; }
-        .card-title { font-size: 1.2rem; font-weight: bold; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; }
-        .summary-text p { line-height: 1.8; font-size: 1.05rem; }
+        .card-title { font-size: 1.2rem; font-weight: bold; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px;}
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #e0e0e0; padding: 15px; text-align: center; }
         th { background-color: #f8f9fa; color: #2c3e50; font-weight: bold; }
         
-        .employee-info { display: flex; gap: 20px; margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border-left: 4px solid #3498db; }
-        .employee-info input, .employee-info select { padding: 10px; font-size: 1.05rem; border: 1px solid #ccc; border-radius: 5px; }
+        .employee-info { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border-left: 4px solid #3498db; }
+        .employee-info input, .employee-info select { padding: 10px; font-size: 1.05rem; border: 1px solid #ccc; border-radius: 5px; min-width: 150px; }
         
-        /* 按鈕區塊設計 */
         .action-buttons { display: flex; gap: 15px; margin-top: 20px; align-items: center; }
         .submit-btn { background-color: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 1.1rem; font-weight: bold; flex: 2; transition: 0.3s; }
         .submit-btn:hover { background-color: #219653; }
@@ -40,18 +38,28 @@
         .draft-time { font-size: 0.9rem; color: #e67e22; font-weight: bold; flex: 1; text-align: right; }
         #statusMessage { margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.1rem; }
 
-        .star-guide { background-color: #fef9e7; border-left: 5px solid #f1c40f; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
-        .star-element { display: flex; margin-bottom: 12px; line-height: 1.5; }
-        .star-letter { font-weight: bold; font-size: 1.2rem; color: #e67e22; width: 35px; flex-shrink: 0; }
-        .eval-section { display: flex; gap: 20px; margin-bottom: 30px; border-bottom: 1px dashed #bdc3c7; padding-bottom: 30px; }
-        .reference-box { flex: 1; background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e0e0e0; font-size: 0.95rem; line-height: 1.6; }
-        .reference-box h4 { margin-top: 0; color: #2980b9; border-bottom: 1px solid #dcdde1; padding-bottom: 10px; }
-        .input-box { flex: 2; display: flex; flex-direction: column; }
-        .input-box label { font-weight: bold; margin-bottom: 5px; color: #2c3e50; font-size: 1.05rem; }
-        .resize-hint { font-size: 0.85rem; color: #e67e22; margin-bottom: 10px; font-weight: normal; }
+        .eval-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 35px; border-bottom: 1px dashed #bdc3c7; padding-bottom: 30px; }
+        .reference-box { background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e0e0e0; font-size: 0.95rem; line-height: 1.6; }
+        .reference-box h4 { margin-top: 0; color: #2980b9; border-bottom: 1px solid #dcdde1; padding-bottom: 10px; margin-bottom: 10px;}
         
-        /* 放大填寫框的高度與字體，並確保可以垂直伸縮 */
-        .input-box textarea { flex: 1; padding: 18px; border: 2px solid #f1c40f; border-radius: 8px; font-family: inherit; font-size: 1.1rem; resize: vertical; min-height: 250px; background-color: #fffdf5; line-height: 1.6; }
+        .input-box { display: block; width: 100%; }
+        .input-box label { font-weight: bold; margin-bottom: 8px; color: #2c3e50; font-size: 1.05rem; display: block; }
+        
+        .input-box textarea { width: 100%; height: 250px; min-height: 150px; padding: 18px; border: 2px solid #f1c40f; border-radius: 8px; font-family: inherit; font-size: 1.1rem; resize: vertical; box-sizing: border-box; background-color: #fffdf5; line-height: 1.6; margin-bottom: 10px; }
+        
+        .upload-area { display: flex; align-items: center; gap: 10px; }
+        .upload-btn { background-color: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.95rem; font-weight: bold; }
+        .upload-btn:hover { background-color: #d68910; }
+        .upload-status { font-size: 0.9rem; color: #7f8c8d; }
+
+        /* 主管評分區專用樣式 */
+        .question-text { font-weight: bold; color: #34495e; margin-bottom: 10px; display: block; }
+        .tag-role { background-color: #e8f4f8; color: #2980b9; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; margin-right: 10px; }
+        .tag-dimension { background-color: #fef5e7; color: #d35400; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; }
+        .radio-container { display: flex; justify-content: space-between; margin-top: 15px; }
+        .radio-container label { flex: 1; text-align: center; background-color: #ecf0f1; padding: 10px; margin: 0 5px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; border: 1px solid #bdc3c7; transition: 0.2s; }
+        .radio-container input[type="radio"] { display: none; }
+        .radio-container input[type="radio"]:checked + label { background-color: #3498db; color: white; border-color: #2980b9; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -59,8 +67,8 @@
         <h2>RD2 評估系統面板</h2>
         <ul>
             <li id="nav-policy" class="active" onclick="switchTab('policy')">系統說明與政策</li>
-            <li id="nav-weight" onclick="switchTab('weight')">權重分配矩陣</li>
             <li id="nav-self" onclick="switchTab('self')">員工自評填寫區 (STAR)</li>
+            <li id="nav-radar" onclick="switchTab('radar')">主管評分區 (當責維度)</li>
         </ul>
     </div>
     
@@ -82,9 +90,6 @@
                     <p><b>高潛力成員：</b>多問「如果你是我，會怎麼做？」</p>
                 </div>
             </div>
-        </div>
-
-        <div id="tab-weight" class="tab-content">
             <div class="card">
                 <div class="card-title">📊 Level 權重分配矩陣</div>
                 <table>
@@ -98,11 +103,16 @@
         <div id="tab-self" class="tab-content">
             <div class="card">
                 <div class="employee-info">
-                    <strong style="line-height: 40px; font-size: 1.1rem;">受評員工資訊：</strong>
-                    <input type="text" id="self_empName" placeholder="請輸入姓名" required>
-                    <input type="text" id="self_empID" placeholder="請輸入工號" required>
+                    <strong style="line-height: 40px; font-size: 1.1rem;">填寫者資料：</strong>
+                    <input type="text" id="self_empName" placeholder="姓名" required>
+                    <input type="text" id="self_empID" placeholder="工號" required>
+                    <select id="self_empDept" onchange="updateReferences()">
+                        <option value="">-- 選擇團隊 --</option>
+                        <option value="EE">HW / EE 團隊</option>
+                        <option value="FW">FW 韌體團隊</option>
+                    </select>
                     <select id="self_empRole" onchange="updateReferences()">
-                        <option value="">請選擇評估職級</option>
+                        <option value="">-- 選擇職級 --</option>
                         <option value="junior">Junior Engineer (13, 19)</option>
                         <option value="senior">Senior Engineer (23)</option>
                         <option value="leader">EE/FW Leader (29)</option>
@@ -112,67 +122,60 @@
             </div>
 
             <div class="card">
-                <div class="card-title">💡 填寫指引：使用 STAR 原則撰寫您的實績 (請參考下方工程師範例)</div>
-                <div class="star-guide">
-                    <div class="star-element">
-                        <div class="star-letter">S</div>
-                        <div><b>Situation (情境)：</b>面臨的挑戰或背景是什麼？<br>
-                        <span style="color:#7f8c8d; font-size:0.95rem;">(例：GB300 伺服器進行 MLPerf 測試時，效能難以驗證且手動測試耗時過長。)</span></div>
-                    </div>
-                    <div class="star-element">
-                        <div class="star-letter">T</div>
-                        <div><b>Task (任務)：</b>您的具體目標是什麼？<br>
-                        <span style="color:#7f8c8d; font-size:0.95rem;">(例：需建立自動化測試環境，並確保 Llama 3.1 405B 模型能順利驗證通過。)</span></div>
-                    </div>
-                    <div class="star-element">
-                        <div class="star-letter">A</div>
-                        <div><b>Action (行動)：</b>您採取了什麼具體行動、技術或跨部門協調？<br>
-                        <span style="color:#7f8c8d; font-size:0.95rem;">(例：獨立撰寫 autocheck.sh 自動化指令碼，導入至 /mlperf_llama3.1_01 資料夾，並協調建立追蹤機制。)</span></div>
-                    </div>
-                    <div class="star-element">
-                        <div class="star-letter">R</div>
-                        <div><b>Result (結果)：</b>最終達成的「量化」成果是什麼？<br>
-                        <span style="color:#7f8c8d; font-size:0.95rem;">(例：成功讓無效除錯時間減少 30%，驗證順利通過，並將此流程提出內部專利申請。)</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">📝 自評實績填寫區</div>
+                <div class="card-title">📝 自評實績填寫區 (支援拖曳放大框線與上傳圖片)</div>
                 
                 <div class="eval-section">
                     <div class="reference-box">
                         <h4>IDP - 未來潛力</h4>
-                        <ul><li>專業知識與技能熟練度</li><li>語言熟悉度</li><li>持續學習新技術</li></ul>
+                        <p><b>評估重點：</b>專業知識與技能熟練度 / 語言熟悉度 / 是否能持續學習與應用新技術</p>
+                        <p style="color:#7f8c8d; font-size:0.9rem; margin-top:5px;"><b>撰寫範例：</b>從英語口說基礎趨近於零的起點出發，我透過反覆演練簡報與修正專業術語發音，達成能於團隊面前獨立念讀並講解數頁技術簡報的顯著進步。</p>
                     </div>
                     <div class="input-box">
-                        <label>✏️ 您的 IDP 實績說明 (請使用 STAR 寫法)：</label>
-                        <div class="resize-hint">💡 提示：可使用滑鼠拖曳輸入框「右下角的斜線區域」，自由上下拉長框框大小。</div>
-                        <textarea id="idp_text" placeholder="請在此填寫您的 IDP 實績..."></textarea>
+                        <label>✏️ 請填寫您的 IDP 實績：</label>
+                        <textarea id="idp_text" placeholder="請在此填寫... (右下角斜線區域可下拉放大框線)"></textarea>
+                        <div class="upload-area">
+                            <input type="file" id="img_idp" accept="image/*" style="display:none;" onchange="uploadImage(this, 'idp_text', 'status_idp')">
+                            <button class="upload-btn" type="button" onclick="document.getElementById('img_idp').click()">📎 上傳證明圖片</button>
+                            <span class="upload-status" id="status_idp">支援 PNG, JPG。上傳後自動轉為網址貼入框內。</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="eval-section">
                     <div class="reference-box">
                         <h4>OKR - 創新與改善能力</h4>
-                        <ul><li>提出新想法或改善流程</li><li>前瞻性思考</li><li>提升效率</li><li>專利研發</li></ul>
+                        <p><b>評估重點：</b>是否能提出新想法或改善流程 / 對問題是否有前瞻性思考 / 是否能有效提升團隊或工作的效率 / 專利研發</p>
+                        <div style="color:#7f8c8d; font-size:0.9rem; margin-top:5px;">
+                            <b>撰寫範例 (請以 STAR 結構描述)：</b><br>
+                            - 技術創新：導入 PegaAI 助手與自動化檢查清單，減少 RD 資源投入 20% 並降低錯誤。<br>
+                            - 效率並重：交付時間縮短 20%，現場支援一次完成率達 95%。<br>
+                            - 客戶感受：與 Diag team 合作完成具備 GUI 的 Debug 工具，啟動時間 < 5 秒，操作步驟 < 3 步完成。
+                        </div>
                     </div>
                     <div class="input-box">
-                        <label>✏️ 您的 OKR 實績說明 (請使用 STAR 寫法)：</label>
-                        <div class="resize-hint">💡 提示：可使用滑鼠拖曳輸入框「右下角的斜線區域」，自由上下拉長框框大小。</div>
-                        <textarea id="okr_text" placeholder="請在此填寫您的 OKR 實績..."></textarea>
+                        <label>✏️ 請填寫您的 OKR 實績：</label>
+                        <textarea id="okr_text" placeholder="請在此填寫... (右下角斜線區域可下拉放大框線)"></textarea>
+                        <div class="upload-area">
+                            <input type="file" id="img_okr" accept="image/*" style="display:none;" onchange="uploadImage(this, 'okr_text', 'status_okr')">
+                            <button class="upload-btn" type="button" onclick="document.getElementById('img_okr').click()">📎 上傳證明圖片</button>
+                            <span class="upload-status" id="status_okr">支援 PNG, JPG。上傳後自動轉為網址貼入框內。</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="eval-section">
                     <div class="reference-box" id="kpi_ref_box">
                         <h4>KPI - 角色基本盤穩定度</h4>
-                        <p style="color: #e74c3c; font-weight: bold;">請先於上方選擇「評估職級」，系統將自動載入參考標準。</p>
+                        <p style="color: #e74c3c; font-weight: bold;">請先於上方選擇「團隊」與「職級」，系統將自動載入您專屬的 Base line 與 OutStanding 標準。</p>
                     </div>
                     <div class="input-box">
-                        <label>✏️ 您的 KPI 實績說明 (請使用 STAR 寫法)：</label>
-                        <div class="resize-hint">💡 提示：可使用滑鼠拖曳輸入框「右下角的斜線區域」，自由上下拉長框框大小。</div>
-                        <textarea id="kpi_text" placeholder="請在此填寫您的 KPI 實績..."></textarea>
+                        <label>✏️ 請填寫您的 KPI 實績：</label>
+                        <textarea id="kpi_text" placeholder="請在此填寫... (右下角斜線區域可下拉放大框線)"></textarea>
+                        <div class="upload-area">
+                            <input type="file" id="img_kpi" accept="image/*" style="display:none;" onchange="uploadImage(this, 'kpi_text', 'status_kpi')">
+                            <button class="upload-btn" type="button" onclick="document.getElementById('img_kpi').click()">📎 上傳證明圖片</button>
+                            <span class="upload-status" id="status_kpi">支援 PNG, JPG。上傳後自動轉為網址貼入框內。</span>
+                        </div>
                     </div>
                 </div>
 
@@ -184,11 +187,54 @@
                 <div id="statusMessage"></div>
             </div>
         </div>
+
+        <div id="tab-radar" class="tab-content">
+            <div class="card">
+                <div class="card-title">📝 主管專用：當責維度線上評分區</div>
+                <div class="employee-info" style="border-left: 4px solid #e67e22; background-color: #fef5e7;">
+                    <strong style="line-height: 40px;">評分對象：</strong>
+                    <input type="text" id="radar_empName" placeholder="請輸入被評估員工姓名" required>
+                    <input type="text" id="radar_empID" placeholder="請輸入被評估員工工號" required>
+                </div>
+
+                <div style="border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px;" class="question-block" data-id="1" data-role="高階管理層" data-dimension="承諾 Commitment" data-question="我能清晰地定義並傳達組織的使命與願景">
+                    <span class="tag-role">高階管理層 (ID: 1)</span><span class="tag-dimension">承諾 Commitment</span>
+                    <p class="question-text" style="margin-top: 10px;">我能清晰地定義並傳達組織的使命與願景</p>
+                    <div class="radio-container">
+                        <input type="radio" id="q1_1" name="q1" value="1"><label for="q1_1">1分</label>
+                        <input type="radio" id="q1_2" name="q1" value="2"><label for="q1_2">2分</label>
+                        <input type="radio" id="q1_3" name="q1" value="3"><label for="q1_3">3分</label>
+                        <input type="radio" id="q1_4" name="q1" value="4"><label for="q1_4">4分</label>
+                        <input type="radio" id="q1_5" name="q1" value="5"><label for="q1_5">5分</label>
+                    </div>
+                </div>
+                <div style="border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px;" class="question-block" data-id="2" data-role="高階管理層" data-dimension="承諾 Commitment" data-question="我負責確保所有團隊朝著共同目標努力，並能有效調動資源">
+                    <span class="tag-role">高階管理層 (ID: 2)</span><span class="tag-dimension">承諾 Commitment</span>
+                    <p class="question-text" style="margin-top: 10px;">我負責確保所有團隊朝著共同目標努力，並能有效調動資源</p>
+                    <div class="radio-container">
+                        <input type="radio" id="q2_1" name="q2" value="1"><label for="q2_1">1分</label>
+                        <input type="radio" id="q2_2" name="q2" value="2"><label for="q2_2">2分</label>
+                        <input type="radio" id="q2_3" name="q2" value="3"><label for="q2_3">3分</label>
+                        <input type="radio" id="q2_4" name="q2" value="4"><label for="q2_4">4分</label>
+                        <input type="radio" id="q2_5" name="q2" value="5"><label for="q2_5">5分</label>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" style="background-color: #e67e22; width: 100%; margin-top: 20px;" onclick="submitRadarToCloud()">🚀 線上送出「主管當責評分」</button>
+                <div id="statusMessageRadar" style="margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.1rem;"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // 🔑 您的專屬雲端大腦網址已寫死在這裡
+        // ==========================================
+        // 🔑 系統金鑰設定區 (老闆請在這裡填入您的網址與金鑰)
+        // ==========================================
         const DATABASE_URL = "https://script.google.com/macros/s/AKfycbw2vXcdwUQySt6MkPVXXWc-SAZ_DEriWxwd1T0AXSvaMQTCqb4og8BUdg9biKx-0rk/exec";
+        
+        // 申請免費圖床金鑰： https://api.imgbb.com/
+        const IMGBB_API_KEY = "7288ba9f0453b8e0f8ca8e19d9a3046b";
+        // ==========================================
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -197,67 +243,110 @@
             document.getElementById('nav-' + tabId).classList.add('active');
         }
 
-        const roleReferences = {
-            'junior': `<h4>KPI 參考標準: Junior Engineer</h4><span style="font-size: 0.95rem;">1. Schematic design<br>2. L10 connection review<br>3. L6/L10 System bug fix</span>`,
-            'senior': `<h4>KPI 參考標準: Senior Engineer</h4><span style="font-size: 0.95rem;">1. Mother board schematic design<br>2. Layout prepare & review</span>`,
-            'leader': `<h4>KPI 參考標準: EE/FW Leader</h4><span style="font-size: 0.95rem;">1. Resource request to DM<br>2. System level bug handle (Cross function)</span>`,
-            'manager': `<h4>KPI 參考標準: Design Manager</h4><span style="font-size: 0.95rem;">1. Schedule control<br>2. Discus with customer<br>3. Task filter and assign</span>`
+        const kpiMatrix = {
+            'EE': {
+                'junior': '<b>【Base line】</b><br>1. BOM create and maintain.<br>2. Work with senior engineer 2nd source spec check, apply symbol.<br>3. Help senior engineer task.<br>4. Daughter board design (Riser, interposer card etc).<br>5. Rework and Debug with senior engineer.<br>6. Check list prepare.<br>7. Design no low level HW issue.<br><br><b>【OutStanding】</b><br>1. Independent board level debug and daughter board schematic design.<br>2. Independent MB schematic review and provide solution.',
+                'senior': '<b>【Base line】</b><br>1. Mother board schematic design, GPIO table, Sequence design.<br>2. Layout prepare & review.<br>3. Prepare schematic & Layout file for vendor review.<br>4. Board level bug handle and solve.<br>5. Help solve junior engineer question.<br>6. Check list prepare.<br><br><b>【OutStanding】</b><br>1. System level debug and cross function team debug.<br>2. Proposal prepare and solution survey.',
+                'leader': '<b>【Base line】</b><br>1. Resource request to DM.<br>2. Review MB schematic/layout file & junior engineer working items.<br>3. System level bug handle and solve. Prepare analysis report.<br>4. Proposal prepare and new solution survey.<br>5. Check list review.<br><br><b>【OutStanding】</b><br>1. Cross function team negotiation.<br>2. Overall project status handle and update to manager.<br>3. Discus with customer for system design.',
+                'manager': '<b>【Base line】</b><br>1. Review overall connection, key feature design.<br>2. Schedule control.<br>3. Discus with customer for system design.<br>4. Overall project status handle.<br>5. Cross function team negotiation.<br>6. Task filter and assign.<br><br><b>【OutStanding】</b><br>1. Limitation resource to let project on-going.<br>2. No complain or escalate from customer/cross function.<br>3. All member can achieve outstanding requirement.'
+            },
+            'FW': {
+                'junior': '<b>【Base line】</b><br>1. Basic firmware coding and debugging under senior guidance.<br>2. Unit test case development and execution.<br>3. Firmware build process understanding.<br>4. Bug tracking and documentation.<br>5. Firmware release package preparation.<br><br><b>【OutStanding】</b><br>1. Independent module-level firmware development.<br>2. Propose test automation improvements.<br>3. Self-learning new MCU/SoC platforms.',
+                'senior': '<b>【Base line】</b><br>1. System firmware architecture design.<br>2. Driver development for hardware components.<br>3. Firmware debugging at system level.<br>4. Code review and mentor junior engineers.<br>5. Firmware version control and release management.<br><br><b>【OutStanding】</b><br>1. Cross-platform firmware migration and porting.<br>2. Security firmware implementation.<br>3. Proposal for new firmware architecture or tools.',
+                'leader': '<b>【Base line】</b><br>1. Resource planning and task assignment for FW team.<br>2. Review firmware architecture and code quality.<br>3. System level bug analysis, prepare report and present.<br>4. Cross function team coordination.<br>5. Firmware roadmap planning.<br><br><b>【OutStanding】</b><br>1. Cross function negotiation to let project run smoothly.<br>2. Overall project firmware status handle.<br>3. Customer requirement analysis and proposal presentation.',
+                'manager': '<b>【Base line】</b><br>1. Review overall firmware architecture.<br>2. Schedule control and milestone tracking.<br>3. Customer technical discussion.<br>4. Overall project status handle and update.<br>5. Task prioritization and resource allocation.<br><br><b>【OutStanding】</b><br>1. Deliver project with limited resource on schedule.<br>2. No escalation from customer or cross function team.<br>3. All team members achieve outstanding performance.'
+            }
         };
 
         function updateReferences() {
+            const dept = document.getElementById('self_empDept').value;
             const role = document.getElementById('self_empRole').value;
             const refBox = document.getElementById('kpi_ref_box');
-            if(role && roleReferences[role]) { refBox.innerHTML = roleReferences[role]; } 
-            else { refBox.innerHTML = `<h4>KPI - 角色基本盤穩定度</h4><p style="color: #e74c3c; font-weight: bold;">請先選擇職級載入標準。</p>`; }
+            
+            if(dept && role && kpiMatrix[dept] && kpiMatrix[dept][role]) { 
+                refBox.innerHTML = `<h4>KPI - 角色專屬標準 (${dept} - ${role.toUpperCase()})</h4><div style="font-size: 0.95rem;">${kpiMatrix[dept][role]}</div>`; 
+            } else { 
+                refBox.innerHTML = `<h4>KPI - 角色基本盤穩定度</h4><p style="color: #e74c3c; font-weight: bold;">請先於上方選擇「團隊」與「職級」載入標準。</p>`; 
+            }
         }
 
-        // ==========================================
-        // 💾 暫存與歷史紀錄功能區塊
-        // ==========================================
-        document.addEventListener('DOMContentLoaded', () => {
-            const inputs = document.querySelectorAll('input, select, textarea');
+        async function uploadImage(fileInput, textAreaId, statusId) {
+            const file = fileInput.files[0];
+            if (!file) return;
+            const statusSpan = document.getElementById(statusId);
             
-            // 網頁載入時，把之前的歷史紀錄拉回來
+            if(IMGBB_API_KEY.includes("請貼上")) {
+                statusSpan.innerText = "❌ 系統尚未設定圖床金鑰，無法上傳。";
+                statusSpan.style.color = "#e74c3c";
+                return;
+            }
+
+            statusSpan.innerText = "⏳ 圖片上傳雲端中，請稍候...";
+            statusSpan.style.color = "#d35400";
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            try {
+                const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const textArea = document.getElementById(textAreaId);
+                    textArea.value += `\n\n[實績證明圖片]: ${data.data.url}\n`;
+                    statusSpan.innerText = "✅ 上傳成功！網址已貼入框內。";
+                    statusSpan.style.color = "#27ae60";
+                    localStorage.setItem('RD2Sys_' + textAreaId, textArea.value);
+                } else { throw new Error("上傳遭拒絕"); }
+            } catch (error) {
+                statusSpan.innerText = "❌ 上傳失敗，請檢查網路或 API 金鑰。";
+                statusSpan.style.color = "#e74c3c";
+            }
+            fileInput.value = "";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input[type="text"], select, textarea');
             inputs.forEach(input => {
                 const savedVal = localStorage.getItem('RD2Sys_' + input.id);
                 if(savedVal) {
                     input.value = savedVal; 
-                    if(input.id === 'self_empRole') updateReferences();
+                    if(input.id === 'self_empRole' || input.id === 'self_empDept') updateReferences();
                 }
-                
-                // 員工每打一個字，系統就在背景偷偷存檔
                 input.addEventListener('input', (e) => {
                     localStorage.setItem('RD2Sys_' + e.target.id, e.target.value);
-                    updateDraftTime(false); // 不跳提示，只更新時間
+                    updateDraftTime(false);
                 });
             });
 
-            // 讀取最後一次存檔時間
+            // 回復雷達圖的 radio btn 記憶
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                const savedRadio = localStorage.getItem('RD2Sys_' + radio.name);
+                if(savedRadio && radio.value === savedRadio) radio.checked = true;
+                radio.addEventListener('change', (e) => {
+                    localStorage.setItem('RD2Sys_' + e.target.name, e.target.value);
+                });
+            });
+
             const lastTime = localStorage.getItem('RD2Sys_LastDraftTime');
-            if(lastTime) {
-                document.getElementById('draft_time_display').innerText = "📝 上次自動暫存：" + lastTime;
-            }
+            if(lastTime) document.getElementById('draft_time_display').innerText = "📝 上次自動暫存：" + lastTime;
         });
 
         function saveDraftManually() {
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                localStorage.setItem('RD2Sys_' + input.id, input.value);
-            });
+            const inputs = document.querySelectorAll('input[type="text"], select, textarea');
+            inputs.forEach(input => localStorage.setItem('RD2Sys_' + input.id, input.value));
             updateDraftTime(true);
         }
 
         function updateDraftTime(showAlert) {
             const now = new Date();
-            const timeString = now.getHours().toString().padStart(2, '0') + ":" + 
-                               now.getMinutes().toString().padStart(2, '0') + ":" + 
-                               now.getSeconds().toString().padStart(2, '0');
+            const timeString = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
             localStorage.setItem('RD2Sys_LastDraftTime', timeString);
             document.getElementById('draft_time_display').innerText = "💾 最新暫存進度：" + timeString;
             
             if(showAlert) {
                 document.getElementById('statusMessage').style.color = '#2980b9';
-                document.getElementById('statusMessage').innerText = `✅ 草稿已於 ${timeString} 成功暫存於本機！您可以隨時關閉網頁，下次回來繼續寫。`;
+                document.getElementById('statusMessage').innerText = `✅ 草稿已於 ${timeString} 成功暫存於本機！`;
             }
         }
 
@@ -267,25 +356,33 @@
                 location.reload();
             }
         }
-        // ==========================================
 
         function submitToCloud() {
+            const dept = document.getElementById('self_empDept').value;
             const name = document.getElementById('self_empName').value;
             const id = document.getElementById('self_empID').value;
             const role = document.getElementById('self_empRole').value;
             
-            if(!name || !id || !role) return alert("請完整填寫姓名、工號並選擇職級後再送出！");
+            if(!dept || !name || !id || !role) return alert("請完整填寫團隊、姓名、工號並選擇職級後再送出！");
+
+            const roleText = document.getElementById('self_empRole').options[document.getElementById('self_empRole').selectedIndex].text;
+            const fullRole = dept + " - " + roleText;
 
             const formData = new URLSearchParams();
             formData.append('name', name);
             formData.append('id', id);
-            formData.append('role', document.getElementById('self_empRole').options[document.getElementById('self_empRole').selectedIndex].text);
+            formData.append('role', fullRole);
             formData.append('idp', document.getElementById('idp_text').value);
             formData.append('okr', document.getElementById('okr_text').value);
             formData.append('kpi', document.getElementById('kpi_text').value);
 
             document.getElementById('statusMessage').style.color = 'blue';
             document.getElementById('statusMessage').innerText = '資料傳送至雲端中，請稍候...';
+
+            if(DATABASE_URL.includes("請把您的")) {
+                alert("老闆，您忘記在程式碼最下方填寫 Google 網址了！");
+                return;
+            }
 
             fetch(DATABASE_URL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
@@ -294,6 +391,48 @@
             }).catch(error => {
                 document.getElementById('statusMessage').style.color = 'red';
                 document.getElementById('statusMessage').innerText = '❌ 連線失敗，請檢查網路連線。';
+            });
+        }
+
+        function submitRadarToCloud() {
+            const name = document.getElementById('radar_empName').value;
+            const id = document.getElementById('radar_empID').value;
+            if(!name || !id) return alert("請填寫被評估者姓名與工號！");
+
+            let scores = "";
+            let allAnswered = true;
+            document.querySelectorAll('.question-block').forEach(block => {
+                const qId = block.getAttribute('data-id');
+                const radio = document.querySelector(`input[name="q${qId}"]:checked`);
+                if(!radio) allAnswered = false;
+                else scores += `[Q${qId}:${radio.value}] `;
+            });
+
+            if(!allAnswered) return alert("還有題目尚未評分！");
+
+            const formData = new URLSearchParams();
+            formData.append('name', "主管評分: " + name);
+            formData.append('id', id);
+            formData.append('role', "主管評分");
+            formData.append('idp', "-");
+            formData.append('okr', "-");
+            formData.append('kpi', scores);
+
+            document.getElementById('statusMessageRadar').style.color = 'blue';
+            document.getElementById('statusMessageRadar').innerText = '分數傳送中...';
+
+            if(DATABASE_URL.includes("請把您的")) {
+                alert("老闆，您忘記在程式碼最下方填寫 Google 網址了！");
+                return;
+            }
+
+            fetch(DATABASE_URL, { method: 'POST', body: formData, mode: 'no-cors' })
+            .then(() => {
+                document.getElementById('statusMessageRadar').style.color = '#27ae60';
+                document.getElementById('statusMessageRadar').innerText = '✅ 評分已成功送到雲端資料庫！';
+            }).catch(error => {
+                document.getElementById('statusMessageRadar').style.color = 'red';
+                document.getElementById('statusMessageRadar').innerText = '❌ 連線失敗，請檢查網路。';
             });
         }
     </script>
