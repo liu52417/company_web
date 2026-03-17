@@ -5,59 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RD2 績效與當責評估系統</title>
     <style>
-        body { font-family: 'Segoe UI', '微軟正黑體', sans-serif; background-color: #f0f2f5; margin: 0; display: flex; color: #333; }
-        .sidebar { width: 260px; background-color: #1a252f; color: #ecf0f1; padding: 30px 20px; height: 100vh; position: fixed; box-shadow: 2px 0 5px rgba(0,0,0,0.1); overflow-y: auto; }
-        .sidebar h2 { font-size: 1.2rem; border-bottom: 2px solid #3498db; padding-bottom: 15px; margin-bottom: 30px; letter-spacing: 1px; }
-        .sidebar ul { list-style-type: none; padding: 0; margin: 0; }
-        .sidebar li { padding: 15px 10px; margin-bottom: 10px; background-color: #2c3e50; border-radius: 5px; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
-        .sidebar li:hover { background-color: #34495e; }
-        .sidebar li.active { background-color: #34495e; border-left: 4px solid #3498db; font-weight: bold; }
+        /* ==========================================
+           🎨 顏色變數設定區 (完美支援深淺色切換)
+           ========================================== */
+        :root {
+            /* 淺色模式 (預設) */
+            --bg-color: #f4f7f6;
+            --sidebar-bg: #1a252f;
+            --sidebar-text: #ecf0f1;
+            --sidebar-hover: #34495e;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #7f8c8d;
+            --border-color: #e0e0e0;
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --warning-bg: #fffdf5;
+            --warning-border: #f1c40f;
+            --info-bg: #e8f4f8;
+            --input-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --header-gradient: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+        }
+
+        [data-theme="dark"] {
+            /* 深色模式 */
+            --bg-color: #121212;
+            --sidebar-bg: #0a0f14;
+            --sidebar-text: #e0e0e0;
+            --sidebar-hover: #1e2a38;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #a0aab2;
+            --border-color: #333333;
+            --primary-color: #3498db;
+            --primary-hover: #5dade2;
+            --accent-color: #e67e22;
+            --success-color: #2ecc71;
+            --warning-bg: #2a2515;
+            --warning-border: #d4ac0d;
+            --info-bg: #1a242f;
+            --input-bg: #2a2a2a;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --header-gradient: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
+        }
+
+        /* 基礎設定 */
+        body { font-family: 'Segoe UI', '微軟正黑體', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; display: flex; transition: background-color 0.3s, color 0.3s; }
         
+        /* 側邊欄設計 */
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: var(--sidebar-text); padding: 30px 20px; height: 100vh; position: fixed; box-shadow: 2px 0 10px var(--shadow-color); overflow-y: auto; display: flex; flex-direction: column; transition: background-color 0.3s; }
+        .sidebar h2 { font-size: 1.2rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 15px; margin-bottom: 30px; letter-spacing: 1px; }
+        .sidebar ul { list-style-type: none; padding: 0; margin: 0; flex-grow: 1; }
+        .sidebar li { padding: 15px 10px; margin-bottom: 10px; background-color: transparent; border-radius: 8px; cursor: pointer; border-left: 4px solid transparent; transition: all 0.2s ease; }
+        .sidebar li:hover { background-color: var(--sidebar-hover); }
+        .sidebar li.active { background-color: var(--sidebar-hover); border-left: 4px solid var(--primary-color); font-weight: bold; }
+        
+        /* 日夜切換按鈕 */
+        .theme-toggle-btn { background-color: var(--sidebar-hover); color: var(--sidebar-text); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; text-align: center; margin-top: 20px; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .theme-toggle-btn:hover { background-color: var(--primary-color); color: white; }
+
+        /* 右側主要內容區 */
         .content { margin-left: 300px; padding: 40px; width: calc(100% - 380px); }
-        .system-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .system-header h1 { color: #2c3e50; font-size: 2rem; margin-bottom: 5px; }
+        .system-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; background: var(--header-gradient); padding: 20px 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow-color); border: 1px solid var(--border-color); }
+        .system-header h1 { color: var(--text-main); font-size: 2rem; margin: 0 0 5px 0; }
         
-        .tab-content { display: none; animation: fadeIn 0.3s; }
+        /* 頁籤切換特效 */
+        .tab-content { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         
-        .card { background: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 5px solid #3498db; }
-        .card-title { font-size: 1.2rem; font-weight: bold; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px;}
+        /* 卡片設計美化 */
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px var(--shadow-color); margin-bottom: 30px; border-top: 5px solid var(--primary-color); border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); transition: background-color 0.3s, box-shadow 0.3s; }
+        .card-title { font-size: 1.3rem; font-weight: bold; color: var(--text-main); margin-bottom: 20px; display: flex; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;}
+        
+        /* 表格設計 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #e0e0e0; padding: 15px; text-align: center; }
-        th { background-color: #f8f9fa; color: #2c3e50; font-weight: bold; }
+        th, td { border: 1px solid var(--border-color); padding: 15px; text-align: center; }
+        th { background-color: var(--info-bg); color: var(--text-main); font-weight: bold; }
         
-        .employee-info { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border-left: 4px solid #3498db; }
-        .employee-info input, .employee-info select { padding: 10px; font-size: 1.05rem; border: 1px solid #ccc; border-radius: 5px; min-width: 150px; }
+        /* 資訊填寫列 */
+        .employee-info { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 20px; background-color: var(--info-bg); border-radius: 8px; border-left: 4px solid var(--primary-color); }
+        .employee-info input, .employee-info select { padding: 12px; font-size: 1.05rem; border: 1px solid var(--border-color); border-radius: 6px; min-width: 150px; background-color: var(--input-bg); color: var(--text-main); transition: 0.3s; }
+        .employee-info input:focus, .employee-info select:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
         
-        .action-buttons { display: flex; gap: 15px; margin-top: 20px; align-items: center; }
-        .submit-btn { background-color: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 1.1rem; font-weight: bold; flex: 2; transition: 0.3s; }
-        .submit-btn:hover { background-color: #219653; }
-        .draft-btn { background-color: #7f8c8d; color: white; border: none; padding: 15px 20px; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold; flex: 1; transition: 0.3s; }
-        .draft-btn:hover { background-color: #95a5a6; }
-        .draft-time { font-size: 0.9rem; color: #e67e22; font-weight: bold; flex: 1; text-align: right; }
+        /* 按鈕美化 */
+        .action-buttons { display: flex; gap: 15px; margin-top: 25px; align-items: center; }
+        .submit-btn { background-color: var(--success-color); color: white; border: none; padding: 16px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold; flex: 2; transition: 0.3s; box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2); }
+        .submit-btn:hover { background-color: #219653; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3); }
+        .draft-btn { background-color: var(--text-muted); color: white; border: none; padding: 16px 20px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; flex: 1; transition: 0.3s; }
+        .draft-btn:hover { background-color: #555; }
+        .draft-time { font-size: 0.95rem; color: var(--accent-color); font-weight: bold; flex: 1; text-align: right; }
         #statusMessage { margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.1rem; }
 
-        .eval-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 35px; border-bottom: 1px dashed #bdc3c7; padding-bottom: 30px; }
-        .reference-box { background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e0e0e0; font-size: 0.95rem; line-height: 1.6; }
-        .reference-box h4 { margin-top: 0; color: #2980b9; border-bottom: 1px solid #dcdde1; padding-bottom: 10px; margin-bottom: 10px;}
+        /* 教學與輸入框區塊 */
+        .star-guide { background-color: var(--warning-bg); border-left: 5px solid var(--warning-border); padding: 25px; border-radius: 8px; margin-bottom: 20px; }
+        .star-element { display: flex; margin-bottom: 12px; line-height: 1.6; }
+        .star-letter { font-weight: bold; font-size: 1.3rem; color: var(--accent-color); width: 40px; flex-shrink: 0; }
+        
+        .eval-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; border-bottom: 1px dashed var(--border-color); padding-bottom: 35px; }
+        .reference-box { background-color: var(--info-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.95rem; line-height: 1.6; }
+        .reference-box h4 { margin-top: 0; color: var(--primary-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;}
         
         .input-box { display: block; width: 100%; }
-        .input-box label { font-weight: bold; margin-bottom: 8px; color: #2c3e50; font-size: 1.05rem; display: block; }
-        .input-box textarea { width: 100%; height: 250px; min-height: 150px; padding: 18px; border: 2px solid #f1c40f; border-radius: 8px; font-family: inherit; font-size: 1.1rem; resize: vertical; box-sizing: border-box; background-color: #fffdf5; line-height: 1.6; margin-bottom: 10px; }
+        .input-box label { font-weight: bold; margin-bottom: 10px; color: var(--text-main); font-size: 1.1rem; display: block; }
+        .input-box textarea { width: 100%; height: 250px; min-height: 150px; padding: 20px; border: 2px solid var(--warning-border); border-radius: 10px; font-family: inherit; font-size: 1.1rem; resize: vertical; box-sizing: border-box; background-color: var(--warning-bg); color: var(--text-main); line-height: 1.7; margin-bottom: 12px; transition: 0.3s; }
+        .input-box textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15); background-color: var(--input-bg); }
         
-        .upload-area { display: flex; align-items: center; gap: 10px; }
-        .upload-btn { background-color: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.95rem; font-weight: bold; }
-        .upload-btn:hover { background-color: #d68910; }
-        .upload-status { font-size: 0.9rem; color: #7f8c8d; }
+        /* 上傳圖片模組 */
+        .upload-area { display: flex; align-items: center; gap: 15px; background-color: var(--bg-color); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color);}
+        .upload-btn { background-color: var(--accent-color); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: bold; transition: 0.3s;}
+        .upload-btn:hover { background-color: #d35400; }
+        .upload-status { font-size: 0.9rem; color: var(--text-muted); }
 
-        .question-text { font-weight: bold; color: #34495e; margin-bottom: 10px; display: block; }
-        .tag-role { background-color: #e8f4f8; color: #2980b9; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; margin-right: 10px; }
-        .tag-dimension { background-color: #fef5e7; color: #d35400; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; }
-        .radio-container { display: flex; justify-content: space-between; margin-top: 15px; }
-        .radio-container label { flex: 1; text-align: center; background-color: #ecf0f1; padding: 10px; margin: 0 5px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; border: 1px solid #bdc3c7; transition: 0.2s; }
+        /* 主管評分區專用樣式 */
+        .question-text { font-weight: bold; color: var(--text-main); margin-bottom: 12px; display: block; font-size: 1.05rem;}
+        .tag-role { background-color: var(--info-bg); color: var(--primary-color); padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; margin-right: 10px; border: 1px solid var(--border-color);}
+        .tag-dimension { background-color: var(--warning-bg); color: var(--accent-color); padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; border: 1px solid var(--border-color);}
+        .radio-container { display: flex; justify-content: space-between; margin-top: 15px; background-color: var(--bg-color); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);}
+        .radio-container label { flex: 1; text-align: center; background-color: var(--input-bg); color: var(--text-main); padding: 12px; margin: 0 5px; border-radius: 6px; cursor: pointer; font-size: 0.95rem; border: 1px solid var(--border-color); transition: 0.2s; font-weight: bold;}
         .radio-container input[type="radio"] { display: none; }
-        .radio-container input[type="radio"]:checked + label { background-color: #3498db; color: white; border-color: #2980b9; font-weight: bold; }
+        .radio-container input[type="radio"]:checked + label { background-color: var(--primary-color); color: white; border-color: var(--primary-hover); box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3); }
     </style>
 </head>
 <body>
@@ -68,15 +138,18 @@
             <li id="nav-self" onclick="switchTab('self')">員工自評填寫區 (STAR)</li>
             <li id="nav-radar" onclick="switchTab('radar')">主管評分區 (當責維度)</li>
         </ul>
+        <button class="theme-toggle-btn" onclick="toggleTheme()">
+            <span id="theme-icon">🌙</span> <span id="theme-text">切換深色模式</span>
+        </button>
     </div>
     
     <div class="content">
         <div class="system-header">
             <div>
                 <h1>RD2 綜合績效系統</h1>
-                <p style="color: #7f8c8d;">RD2 Integrated Performance Workspace</p>
+                <p style="color: var(--text-muted); margin:0;">RD2 Integrated Performance Workspace</p>
             </div>
-            <button onclick="clearCache()" style="background: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">清除本機所有歷史暫存紀錄</button>
+            <button onclick="clearCache()" style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);">清除本機所有暫存紀錄</button>
         </div>
 
         <div id="tab-policy" class="tab-content active">
@@ -102,7 +175,7 @@
         <div id="tab-self" class="tab-content">
             <div class="card">
                 <div class="employee-info">
-                    <strong style="line-height: 40px; font-size: 1.1rem;">填寫者資料：</strong>
+                    <strong style="line-height: 45px; font-size: 1.1rem; color: var(--text-main);">填寫者資料：</strong>
                     <input type="text" id="self_empName" placeholder="姓名" required>
                     <input type="text" id="self_empID" placeholder="工號" required>
                     <select id="self_empDept" onchange="updateReferences()">
@@ -127,7 +200,7 @@
                     <div class="reference-box">
                         <h4>IDP - 未來潛力</h4>
                         <p><b>評估重點：</b>專業知識與技能熟練度 / 語言熟悉度 / 是否能持續學習與應用新技術</p>
-                        <p style="color:#7f8c8d; font-size:0.9rem; margin-top:5px;"><b>撰寫範例：</b>針對 OOO 專業領域知識不足，我透過參與內部培訓與自主研讀規格書，最終取得相關認證，並能獨立完成 OOO 模組的設計與除錯。</p>
+                        <p style="color:var(--text-muted); font-size:0.95rem; margin-top:5px;"><b>撰寫範例：</b>針對 OOO 專業領域知識不足，我透過參與內部培訓與自主研讀規格書，最終取得相關認證，並能獨立完成 OOO 模組的設計與除錯。</p>
                     </div>
                     <div class="input-box">
                         <label>✏️ 請填寫您的 IDP 實績：</label>
@@ -144,7 +217,7 @@
                     <div class="reference-box">
                         <h4>OKR - 創新與改善能力</h4>
                         <p><b>評估重點：</b>是否能提出新想法或改善流程 / 對問題是否有前瞻性思考 / 是否能有效提升團隊或工作的效率 / 專利研發</p>
-                        <div style="color:#7f8c8d; font-size:0.9rem; margin-top:5px;">
+                        <div style="color:var(--text-muted); font-size:0.95rem; margin-top:5px; line-height:1.7;">
                             <b>撰寫範例 (請以 STAR 結構描述)：</b><br>
                             - 技術創新：導入 PegaAI 助手與自動化檢查清單，減少 RD 資源投入 20% 並降低錯誤。<br>
                             - 效率並重：交付時間縮短 20%，現場支援一次完成率達 95%。<br>
@@ -165,7 +238,7 @@
                 <div class="eval-section">
                     <div class="reference-box" id="kpi_ref_box">
                         <h4>KPI - 角色基本盤穩定度</h4>
-                        <p style="color: #e74c3c; font-weight: bold;">請先於上方選擇「團隊」與「職級」，系統將自動載入您專屬的 Base line 與 OutStanding 標準。</p>
+                        <p style="color: var(--accent-color); font-weight: bold;">請先於上方選擇「團隊」與「職級」，系統將自動載入您專屬的 Base line 與 OutStanding 標準。</p>
                     </div>
                     <div class="input-box">
                         <label>✏️ 請填寫您的 KPI 實績：</label>
@@ -190,15 +263,15 @@
         <div id="tab-radar" class="tab-content">
             <div class="card">
                 <div class="card-title">📝 主管專用：當責維度線上評分區</div>
-                <div class="employee-info" style="border-left: 4px solid #e67e22; background-color: #fef5e7;">
-                    <strong style="line-height: 40px;">評分對象：</strong>
+                <div class="employee-info" style="border-left: 4px solid var(--accent-color);">
+                    <strong style="line-height: 45px; color: var(--text-main);">評分對象：</strong>
                     <input type="text" id="radar_empName" placeholder="請輸入被評估員工姓名" required>
                     <input type="text" id="radar_empID" placeholder="請輸入被評估員工工號" required>
                 </div>
 
-                <div style="border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px;" class="question-block" data-id="1" data-role="高階管理層" data-dimension="承諾 Commitment" data-question="我能清晰地定義並傳達組織的使命與願景">
+                <div style="border-bottom: 1px dashed var(--border-color); padding-bottom: 25px; margin-bottom: 25px;" class="question-block" data-id="1" data-role="高階管理層" data-dimension="承諾 Commitment">
                     <span class="tag-role">高階管理層 (ID: 1)</span><span class="tag-dimension">承諾 Commitment</span>
-                    <p class="question-text" style="margin-top: 10px;">我能清晰地定義並傳達組織的使命與願景</p>
+                    <p class="question-text" style="margin-top: 15px;">我能清晰地定義並傳達組織的使命與願景</p>
                     <div class="radio-container">
                         <input type="radio" id="q1_1" name="q1" value="1"><label for="q1_1">1分</label>
                         <input type="radio" id="q1_2" name="q1" value="2"><label for="q1_2">2分</label>
@@ -207,9 +280,9 @@
                         <input type="radio" id="q1_5" name="q1" value="5"><label for="q1_5">5分</label>
                     </div>
                 </div>
-                <div style="border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px;" class="question-block" data-id="2" data-role="高階管理層" data-dimension="承諾 Commitment" data-question="我負責確保所有團隊朝著共同目標努力，並能有效調動資源">
+                <div style="border-bottom: 1px dashed var(--border-color); padding-bottom: 25px; margin-bottom: 25px;" class="question-block" data-id="2" data-role="高階管理層" data-dimension="承諾 Commitment">
                     <span class="tag-role">高階管理層 (ID: 2)</span><span class="tag-dimension">承諾 Commitment</span>
-                    <p class="question-text" style="margin-top: 10px;">我負責確保所有團隊朝著共同目標努力，並能有效調動資源</p>
+                    <p class="question-text" style="margin-top: 15px;">我負責確保所有團隊朝著共同目標努力，並能有效調動資源</p>
                     <div class="radio-container">
                         <input type="radio" id="q2_1" name="q2" value="1"><label for="q2_1">1分</label>
                         <input type="radio" id="q2_2" name="q2" value="2"><label for="q2_2">2分</label>
@@ -219,16 +292,47 @@
                     </div>
                 </div>
                 
-                <button class="submit-btn" style="background-color: #e67e22; width: 100%; margin-top: 20px;" onclick="submitRadarToCloud()">🚀 線上送出「主管當責評分」</button>
+                <button class="submit-btn" style="background-color: var(--accent-color); width: 100%; margin-top: 20px; box-shadow: 0 4px 6px rgba(230, 126, 34, 0.2);" onclick="submitRadarToCloud()">🚀 線上送出「主管當責評分」</button>
                 <div id="statusMessageRadar" style="margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.1rem;"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // 🔑 請把您的Google網址與ImgBB圖床金鑰貼在這裡
+        // ==========================================
+        // 🔑 系統金鑰設定區
+        // ==========================================
         const DATABASE_URL = "https://script.google.com/macros/s/AKfycbw2vXcdwUQySt6MkPVXXWc-SAZ_DEriWxwd1T0AXSvaMQTCqb4og8BUdg9biKx-0rk/exec";
         const IMGBB_API_KEY = "7288ba9f0453b8e0f8ca8e19d9a3046b";
+        // ==========================================
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('RD2Sys_Theme', 'light');
+                icon.innerText = '🌙';
+                text.innerText = '切換深色模式';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('RD2Sys_Theme', 'dark');
+                icon.innerText = '☀️';
+                text.innerText = '切換淺色模式';
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('RD2Sys_Theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-icon').innerText = '☀️';
+                document.getElementById('theme-text').innerText = '切換淺色模式';
+            }
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -239,16 +343,16 @@
 
         const kpiMatrix = {
             'EE': {
-                'junior': '<b>【Base line】</b><br>1. BOM create and maintain.<br>2. Work with senior engineer 2nd source spec check, apply symbol.<br>3. Help senior engineer task.<br>4. Daughter board design.<br>5. Rework and Debug with senior engineer.<br>6. Check list prepare.<br>7. Design no low level HW issue.<br><br><b>【OutStanding】</b><br>1. Independent board level debug and daughter board schematic design.<br>2. Independent MB schematic review and provide solution.',
-                'senior': '<b>【Base line】</b><br>1. Mother board schematic design, GPIO table, Sequence design.<br>2. Layout prepare & review.<br>3. Prepare schematic & Layout file for vendor review.<br>4. Board level bug handle and solve.<br>5. Help solve junior engineer question.<br>6. Check list prepare.<br><br><b>【OutStanding】</b><br>1. System level debug and cross function team debug.<br>2. Proposal prepare and solution survey.',
-                'leader': '<b>【Base line】</b><br>1. Resource request to DM.<br>2. Review MB schematic/layout file & junior engineer working items.<br>3. System level bug handle and solve.<br>4. Proposal prepare and new solution survey.<br>5. Check list review.<br><br><b>【OutStanding】</b><br>1. Cross function team negotiation.<br>2. Overall project status handle and update to manager.<br>3. Discus with customer for system design.',
-                'manager': '<b>【Base line】</b><br>1. Review overall connection, key feature design.<br>2. Schedule control.<br>3. Discus with customer for system design.<br>4. Overall project status handle.<br>5. Cross function team negotiation.<br>6. Task filter and assign.<br><br><b>【OutStanding】</b><br>1. Limitation resource to let project on-going.<br>2. No complain or escalate from customer/cross function.<br>3. All member can achieve outstanding requirement.'
+                'junior': '<b>【Base line】</b><br>1. BOM create and maintain.<br>2. Work with senior engineer 2nd source spec check.<br>3. Daughter board design.<br>4. Check list prepare.<br><br><b>【OutStanding】</b><br>1. Independent board level debug.<br>2. Independent MB schematic review.',
+                'senior': '<b>【Base line】</b><br>1. Mother board schematic design, GPIO table.<br>2. Layout prepare & review.<br>3. Board level bug handle and solve.<br><br><b>【OutStanding】</b><br>1. System level debug and cross function team debug.<br>2. Proposal prepare and solution survey.',
+                'leader': '<b>【Base line】</b><br>1. Resource request to DM.<br>2. Review MB schematic/layout file.<br>3. System level bug handle and solve.<br><br><b>【OutStanding】</b><br>1. Cross function team negotiation.<br>2. Overall project status handle and update to manager.',
+                'manager': '<b>【Base line】</b><br>1. Review overall connection.<br>2. Schedule control.<br>3. Overall project status handle.<br><br><b>【OutStanding】</b><br>1. Limitation resource to let project on-going.<br>2. All member can achieve outstanding requirement.'
             },
             'FW': {
-                'junior': '<b>【Base line】</b><br>1. Basic firmware coding and debugging under senior guidance.<br>2. Unit test case development and execution.<br>3. Firmware build process understanding.<br>4. Bug tracking and documentation.<br>5. Firmware release package preparation.<br><br><b>【OutStanding】</b><br>1. Independent module-level firmware development.<br>2. Propose test automation improvements.<br>3. Self-learning new MCU/SoC platforms.',
-                'senior': '<b>【Base line】</b><br>1. System firmware architecture design.<br>2. Driver development for hardware components.<br>3. Firmware debugging at system level.<br>4. Code review and mentor junior engineers.<br>5. Firmware version control and release management.<br><br><b>【OutStanding】</b><br>1. Cross-platform firmware migration and porting.<br>2. Security firmware implementation.<br>3. Proposal for new firmware architecture or tools.',
-                'leader': '<b>【Base line】</b><br>1. Resource planning and task assignment for FW team.<br>2. Review firmware architecture and code quality.<br>3. System level bug analysis, prepare report and present.<br>4. Cross function team coordination.<br>5. Firmware roadmap planning.<br><br><b>【OutStanding】</b><br>1. Cross function negotiation to let project run smoothly.<br>2. Overall project firmware status handle.<br>3. Customer requirement analysis and proposal presentation.',
-                'manager': '<b>【Base line】</b><br>1. Review overall firmware architecture.<br>2. Schedule control and milestone tracking.<br>3. Customer technical discussion.<br>4. Overall project status handle and update.<br>5. Task prioritization and resource allocation.<br><br><b>【OutStanding】</b><br>1. Deliver project with limited resource on schedule.<br>2. No escalation from customer or cross function team.<br>3. All team members achieve outstanding performance.'
+                'junior': '<b>【Base line】</b><br>1. Basic firmware coding and debugging.<br>2. Unit test case development.<br>3. Bug tracking and documentation.<br><br><b>【OutStanding】</b><br>1. Independent module-level firmware development.<br>2. Propose test automation improvements.',
+                'senior': '<b>【Base line】</b><br>1. System firmware architecture design.<br>2. Driver development for hardware components.<br>3. Firmware debugging at system level.<br><br><b>【OutStanding】</b><br>1. Cross-platform firmware migration and porting.<br>2. Security firmware implementation.',
+                'leader': '<b>【Base line】</b><br>1. Resource planning and task assignment.<br>2. Review firmware architecture and code quality.<br>3. System level bug analysis.<br><br><b>【OutStanding】</b><br>1. Cross function negotiation to let project run smoothly.<br>2. Customer requirement analysis and proposal.',
+                'manager': '<b>【Base line】</b><br>1. Review overall firmware architecture.<br>2. Schedule control and milestone tracking.<br>3. Task prioritization and resource allocation.<br><br><b>【OutStanding】</b><br>1. Deliver project with limited resource on schedule.<br>2. All team members achieve outstanding performance.'
             }
         };
 
@@ -260,7 +364,7 @@
             if(dept && role && kpiMatrix[dept] && kpiMatrix[dept][role]) { 
                 refBox.innerHTML = `<h4>KPI - 角色專屬標準 (${dept} - ${role.toUpperCase()})</h4><div style="font-size: 0.95rem;">${kpiMatrix[dept][role]}</div>`; 
             } else { 
-                refBox.innerHTML = `<h4>KPI - 角色基本盤穩定度</h4><p style="color: #e74c3c; font-weight: bold;">請先於上方選擇「團隊」與「職級」載入標準。</p>`; 
+                refBox.innerHTML = `<h4>KPI - 角色基本盤穩定度</h4><p style="color: var(--accent-color); font-weight: bold;">請先於上方選擇「團隊」與「職級」載入標準。</p>`; 
             }
         }
 
@@ -271,12 +375,12 @@
             
             if(IMGBB_API_KEY.includes("請填寫")) {
                 statusSpan.innerText = "❌ 未設定金鑰，無法上傳。";
-                statusSpan.style.color = "#e74c3c";
+                statusSpan.style.color = "var(--accent-color)";
                 return;
             }
 
             statusSpan.innerText = "⏳ 圖片上傳雲端中，請稍候...";
-            statusSpan.style.color = "#d35400";
+            statusSpan.style.color = "var(--primary-color)";
 
             const formData = new FormData();
             formData.append("image", file);
@@ -289,17 +393,18 @@
                     const textArea = document.getElementById(textAreaId);
                     textArea.value += `\n\n[實績證明圖片]: ${data.data.url}\n`;
                     statusSpan.innerText = "✅ 上傳成功！網址已貼入框內。";
-                    statusSpan.style.color = "#27ae60";
+                    statusSpan.style.color = "var(--success-color)";
                     localStorage.setItem('RD2Sys_' + textAreaId, textArea.value);
                 } else { throw new Error("上傳遭拒絕"); }
             } catch (error) {
                 statusSpan.innerText = "❌ 上傳失敗，請檢查網路或 API 金鑰。";
-                statusSpan.style.color = "#e74c3c";
+                statusSpan.style.color = "var(--accent-color)";
             }
             fileInput.value = "";
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            initTheme(); 
             const inputs = document.querySelectorAll('input[type="text"], select, textarea');
             inputs.forEach(input => {
                 const savedVal = localStorage.getItem('RD2Sys_' + input.id);
@@ -338,14 +443,15 @@
             document.getElementById('draft_time_display').innerText = "💾 最新暫存進度：" + timeString;
             
             if(showAlert) {
-                document.getElementById('statusMessage').style.color = '#2980b9';
+                document.getElementById('statusMessage').style.color = 'var(--primary-color)';
                 document.getElementById('statusMessage').innerText = `✅ 草稿已於 ${timeString} 成功暫存於本機！`;
             }
         }
 
         function clearCache() {
             if(confirm('⚠️ 警告：這將會清除您目前打字到一半的所有歷史紀錄，確定要清除嗎？')) {
-                localStorage.clear();
+                localStorage.removeItem('RD2Sys_LastDraftTime');
+                document.querySelectorAll('input, select, textarea').forEach(el => localStorage.removeItem('RD2Sys_' + (el.id || el.name)));
                 location.reload();
             }
         }
@@ -362,7 +468,7 @@
             const fullRole = dept + " - " + roleText;
 
             const formData = new URLSearchParams();
-            formData.append('type', 'self'); // 標記為員工自評
+            formData.append('type', 'self'); 
             formData.append('name', name);
             formData.append('id', id);
             formData.append('role', fullRole);
@@ -370,17 +476,17 @@
             formData.append('okr', document.getElementById('okr_text').value);
             formData.append('kpi', document.getElementById('kpi_text').value);
 
-            document.getElementById('statusMessage').style.color = 'blue';
+            document.getElementById('statusMessage').style.color = 'var(--primary-color)';
             document.getElementById('statusMessage').innerText = '資料傳送至雲端中，請稍候...';
 
             if(DATABASE_URL.includes("請填寫")) return alert("老闆，您忘記填寫 Google 網址了！");
 
             fetch(DATABASE_URL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
-                document.getElementById('statusMessage').style.color = '#27ae60';
+                document.getElementById('statusMessage').style.color = 'var(--success-color)';
                 document.getElementById('statusMessage').innerText = '✅ 報告已成功送到主管的雲端資料庫！您現在可以關閉此網頁。';
             }).catch(error => {
-                document.getElementById('statusMessage').style.color = 'red';
+                document.getElementById('statusMessage').style.color = 'var(--accent-color)';
                 document.getElementById('statusMessage').innerText = '❌ 連線失敗，請檢查網路連線。';
             });
         }
@@ -390,34 +496,38 @@
             const id = document.getElementById('radar_empID').value;
             if(!name || !id) return alert("請填寫被評估者姓名與工號！");
 
-            let scores = "";
+            let q1_score = "";
+            let q2_score = "";
             let allAnswered = true;
-            document.querySelectorAll('.question-block').forEach(block => {
-                const qId = block.getAttribute('data-id');
-                const radio = document.querySelector(`input[name="q${qId}"]:checked`);
-                if(!radio) allAnswered = false;
-                else scores += `[Q${qId}:${radio.value}] `;
-            });
+
+            const q1_radio = document.querySelector('input[name="q1"]:checked');
+            if(!q1_radio) allAnswered = false; else q1_score = q1_radio.value;
+
+            const q2_radio = document.querySelector('input[name="q2"]:checked');
+            if(!q2_radio) allAnswered = false; else q2_score = q2_radio.value;
 
             if(!allAnswered) return alert("還有題目尚未評分！");
 
             const formData = new URLSearchParams();
-            formData.append('type', 'radar'); // 標記為主管評分
+            formData.append('type', 'radar'); 
             formData.append('name', name);
             formData.append('id', id);
-            formData.append('kpi', scores);
+            
+            // 關鍵修改：將兩題分數拆成 q1 和 q2 獨立發送
+            formData.append('q1', q1_score);
+            formData.append('q2', q2_score);
 
-            document.getElementById('statusMessageRadar').style.color = 'blue';
+            document.getElementById('statusMessageRadar').style.color = 'var(--primary-color)';
             document.getElementById('statusMessageRadar').innerText = '分數傳送中...';
 
             if(DATABASE_URL.includes("請填寫")) return alert("老闆，您忘記填寫 Google 網址了！");
 
             fetch(DATABASE_URL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
-                document.getElementById('statusMessageRadar').style.color = '#27ae60';
+                document.getElementById('statusMessageRadar').style.color = 'var(--success-color)';
                 document.getElementById('statusMessageRadar').innerText = '✅ 評分已成功送到雲端資料庫！';
             }).catch(error => {
-                document.getElementById('statusMessageRadar').style.color = 'red';
+                document.getElementById('statusMessageRadar').style.color = 'var(--accent-color)';
                 document.getElementById('statusMessageRadar').innerText = '❌ 連線失敗，請檢查網路。';
             });
         }
