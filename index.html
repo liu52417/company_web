@@ -63,15 +63,21 @@
         .sidebar li:hover { background-color: var(--sidebar-hover); }
         .sidebar li.active { background-color: var(--sidebar-hover); border-left: 4px solid var(--primary-color); font-weight: bold; }
         
-        /* 日夜切換按鈕 */
-        .theme-toggle-btn { background-color: var(--sidebar-hover); color: var(--sidebar-text); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; text-align: center; margin-top: 20px; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .theme-toggle-btn:hover { background-color: var(--primary-color); color: white; }
-
         /* 右側主要內容區 */
         .content { margin-left: 300px; padding: 40px; width: calc(100% - 380px); }
-        .system-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; background: var(--header-gradient); padding: 20px 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow-color); border: 1px solid var(--border-color); }
-        .system-header h1 { color: var(--text-main); font-size: 2rem; margin: 0 0 5px 0; }
         
+        /* 系統頂部 Header (包含標題與右上角按鈕) */
+        .system-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; background: var(--header-gradient); padding: 20px 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow-color); border: 1px solid var(--border-color); }
+        .system-header h1 { color: var(--text-main); font-size: 2rem; margin: 0 0 5px 0; }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+
+        /* 右上方按鈕設計 */
+        .theme-toggle-btn { background-color: var(--sidebar-hover); color: var(--sidebar-text); border: 1px solid var(--border-color); padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 6px var(--shadow-color); }
+        .theme-toggle-btn:hover { background-color: var(--primary-color); color: white; transform: translateY(-2px); }
+        
+        .clear-btn { background: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2); }
+        .clear-btn:hover { background: #c0392b; transform: translateY(-2px); }
+
         /* 頁籤切換特效 */
         .tab-content { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .tab-content.active { display: block; }
@@ -138,9 +144,6 @@
             <li id="nav-self" onclick="switchTab('self')">員工自評填寫區 (STAR)</li>
             <li id="nav-radar" onclick="switchTab('radar')">主管評分區 (當責維度)</li>
         </ul>
-        <button class="theme-toggle-btn" onclick="toggleTheme()">
-            <span id="theme-icon">🌙</span> <span id="theme-text">切換深色模式</span>
-        </button>
     </div>
     
     <div class="content">
@@ -149,7 +152,12 @@
                 <h1>RD2 綜合績效系統</h1>
                 <p style="color: var(--text-muted); margin:0;">RD2 Integrated Performance Workspace</p>
             </div>
-            <button onclick="clearCache()" style="background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);">清除本機所有暫存紀錄</button>
+            <div class="header-actions">
+                <button class="theme-toggle-btn" onclick="toggleTheme()">
+                    <span id="theme-icon">🌙</span> <span id="theme-text">深色模式</span>
+                </button>
+                <button class="clear-btn" onclick="clearCache()">清除本機暫存</button>
+            </div>
         </div>
 
         <div id="tab-policy" class="tab-content active">
@@ -316,12 +324,12 @@
                 body.removeAttribute('data-theme');
                 localStorage.setItem('RD2Sys_Theme', 'light');
                 icon.innerText = '🌙';
-                text.innerText = '切換深色模式';
+                text.innerText = '深色模式';
             } else {
                 body.setAttribute('data-theme', 'dark');
                 localStorage.setItem('RD2Sys_Theme', 'dark');
                 icon.innerText = '☀️';
-                text.innerText = '切換淺色模式';
+                text.innerText = '淺色模式';
             }
         }
 
@@ -330,7 +338,7 @@
             if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('theme-icon').innerText = '☀️';
-                document.getElementById('theme-text').innerText = '切換淺色模式';
+                document.getElementById('theme-text').innerText = '淺色模式';
             }
         }
 
@@ -512,8 +520,6 @@
             formData.append('type', 'radar'); 
             formData.append('name', name);
             formData.append('id', id);
-            
-            // 關鍵修改：將兩題分數拆成 q1 和 q2 獨立發送
             formData.append('q1', q1_score);
             formData.append('q2', q2_score);
 
